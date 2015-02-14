@@ -1,0 +1,115 @@
+---
+title: "Reproducible Research: Peer Assessment 1"
+output: 
+  html_document:
+    keep_md: true
+---
+
+# Reproducible Research: Peer Assessment 1
+Peer Assessment 1 project for [Reproducible Research] (https://www.coursera.org/course/repdata) course on [Coursera] (https://www.coursera.org/).
+
+## Loading and preprocessing the data
+
+1. Load the data.
+```{r readdata}
+dt <- read.csv("activity.csv")
+```
+
+2. Process the data into a format suitable for analysis.
+
+Check variables
+```{r CheckVars}
+names(dt)
+```
+
+Check number of records
+```{r CheckRecNum}
+nrow(dt)
+```
+
+Make clean data set (without NA values) and convert steps to numeric
+```{r removeNA}
+dtClean <- dt[!is.na(dt$steps), ]
+dtClean$steps <- as.numeric(as.character(dtClean$steps))
+```
+
+Check number of records of clean data set
+```{r CheckRecNumC}
+nrow(dtClean)
+```
+
+## What is mean total number of steps taken per day?
+
+1. Histogram of the total number of steps taken each day for clean data without missed values.
+```{r StepsTotalPerDayHist}
+## Calculate total number of steps taken each day
+stepsTotalPerDay <- tapply(dtClean$steps, as.factor(dtClean$date), sum)
+## Build histogram
+hist(stepsTotalPerDay, xlab="Total number of steps taken each day", main="Histogram of the total number of steps taken each day", sub=" for clean data without missed values", col="blue")
+```
+
+2. The mean and median total number of steps taken per day for clean data without missed values.
+```{r StepsTotalPerDayStat}
+stepsMeanPerDay <- mean(stepsTotalPerDay, na.rm=TRUE)
+stepsMedianPerDay <- median(stepsTotalPerDay, na.rm=TRUE)
+```
+Mean: `r as.character(stepsMeanPerDay)`  
+Median: `r as.character(stepsMedianPerDay)`
+
+## What is the average daily activity pattern?
+
+1. Time series plot of the 5-minute interval and the average number of steps taken, averaged across all days.
+```{r StepsMeanPerInterval}
+## Compute average number of steps per intervals
+stepsMeanPerInterval <- aggregate(dtClean$steps, list(dtClean$interval), mean)
+## Set column names
+names(stepsMeanPerInterval) <- c("interval", "mean_steps")
+## Build a plot
+plot(stepsMeanPerInterval$interval, stepsMeanPerInterval$mean_steps, type="l", xlab="5-minute intervals", ylab="average number of steps", main="Average number of steps per 5-minute intervals", col="blue")
+```
+
+2. The 5-minute interval, on average across all the days in the dataset,  which contains the maximum number of steps.
+
+```{r MaxStepsInterval}
+stepsMeanPerInterval$interval[which.max(stepsMeanPerInterval$mean_steps)]
+```
+
+## Imputing missing values
+
+1. Total number of missing values in the dataset.
+```{r NAs}
+sum(is.na(dt$steps))
+```
+
+2. Create new data set based on original and fill in the missing values with average steps for that 5-minute interval valies.
+```{r filling}
+## Copy data set
+dtFilled <- dt
+## merge new data set with average steps for that 5-minute interval
+dtFilled <- merge(dtFilled, stepsMeanPerInterval, by = "interval", sort=FALSE)
+## Fill out missing values with average steps for that 5-minute interval
+dtFilled$steps[is.na(dtFilled$steps)] <- dtFilled$mean_steps[is.na(dtFilled$steps)] 
+## Remove mean_steps column
+dtFilled <- subset(dtFilled, select=-c(mean_steps))
+```
+
+3. Histogram of the total number of steps taken each day for data with filled in missed values.
+```{r StepsTotalPerDayHistFilled}
+## Calculate total number of steps taken each day
+stepsTotalPerDay <- tapply(dtFilled$steps, as.factor(dtFilled$date), sum)
+## Build histogram
+hist(stepsTotalPerDay, xlab="Total number of steps taken each day", main="Histogram of the total number of steps taken each day", sub="for data with filled in missed values", col="red")
+```
+
+4. The mean and median total number of steps taken per day for data with filled in missed values.
+```{r StepsTotalPerDayStatFilled}
+stepsMeanPerDay <- mean(stepsTotalPerDay, na.rm=TRUE)
+stepsMedianPerDay <- median(stepsTotalPerDay, na.rm=TRUE)
+```
+Mean: `r as.character(stepsMeanPerDay)`  
+Median: `r as.character(stepsMedianPerDay)`
+
+Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+
+
+## Are there differences in activity patterns between weekdays and weekends?
