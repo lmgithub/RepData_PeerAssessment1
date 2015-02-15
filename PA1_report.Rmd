@@ -5,8 +5,18 @@ output:
     keep_md: true
 ---
 
-# Reproducible Research: Peer Assessment 1
-Peer Assessment 1 project for [Reproducible Research] (https://www.coursera.org/course/repdata) course on [Coursera] (https://www.coursera.org/).
+Peer Assessment 1 project for [Reproducible Research](https://www.coursera.org/course/repdata) course on [Coursera](https://www.coursera.org/).
+
+## Data description
+This assignment makes use of data from a personal activity monitoring device. This device collects data at 5 minute intervals through out the day. The data consists of two months of data from an anonymous individual collected during the months of October and November, 2012 and include the number of steps taken in 5 minute intervals each day.  
+The variables included in the dataset are:
+* steps: Number of steps taking in a 5-minute interval (missing values are coded as NA)
+* date: The date on which the measurement was taken in YYYY-MM-DD format
+* interval: Identifier for the 5-minute interval in which measurement was taken
+
+
+## Requirements
+Requirements for Peer Assessment 1 are described [here](https://github.com/rdpeng/RepData_PeerAssessment1/blob/master/README.md).
 
 ## Loading and preprocessing the data
 
@@ -45,7 +55,11 @@ nrow(dtClean)
 ## Calculate total number of steps taken each day
 stepsTotalPerDay <- tapply(dtClean$steps, as.factor(dtClean$date), sum)
 ## Build histogram
-hist(stepsTotalPerDay, xlab="Total number of steps taken each day", main="Histogram of the total number of steps taken each day", sub=" for clean data without missed values", col="blue")
+hist(stepsTotalPerDay, 
+     xlab="Total number of steps taken each day", 
+     main="Histogram of the total number of steps taken each day", 
+     sub=" for clean data without missed values", 
+     col="blue")
 ```
 
 2. The mean and median total number of steps taken per day for clean data without missed values.
@@ -65,7 +79,11 @@ stepsMeanPerInterval <- aggregate(dtClean$steps, list(dtClean$interval), mean)
 ## Set column names
 names(stepsMeanPerInterval) <- c("interval", "mean_steps")
 ## Build a plot
-plot(stepsMeanPerInterval$interval, stepsMeanPerInterval$mean_steps, type="l", xlab="5-minute intervals", ylab="average number of steps", main="Average number of steps per 5-minute intervals", col="blue")
+plot(stepsMeanPerInterval$interval, stepsMeanPerInterval$mean_steps, 
+     type="l", 
+     xlab="5-minute intervals", ylab="average number of steps", 
+     main="Average number of steps per 5-minute intervals", 
+     col="blue")
 ```
 
 2. The 5-minute interval, on average across all the days in the dataset,  which contains the maximum number of steps.
@@ -98,7 +116,11 @@ dtFilled <- subset(dtFilled, select=-c(mean_steps))
 ## Calculate total number of steps taken each day
 stepsTotalPerDay <- tapply(dtFilled$steps, as.factor(dtFilled$date), sum)
 ## Build histogram
-hist(stepsTotalPerDay, xlab="Total number of steps taken each day", main="Histogram of the total number of steps taken each day", sub="for data with filled in missed values", col="red")
+hist(stepsTotalPerDay, 
+     xlab="Total number of steps taken each day", 
+     main="Histogram of the total number of steps taken each day", 
+     sub="for data with filled in missed values", 
+     col="red")
 ```
 
 4. The mean and median total number of steps taken per day for data with filled in missed values.
