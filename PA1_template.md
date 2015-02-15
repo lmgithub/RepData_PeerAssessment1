@@ -75,7 +75,7 @@ hist(stepsTotalPerDay,
      col="blue")
 ```
 
-![](PA1_report_files/figure-html/StepsTotalPerDayHist-1.png) 
+![](PA1_template_files/figure-html/StepsTotalPerDayHist-1.png) 
 
 2. The mean and median total number of steps taken per day for clean data without missed values.
 
@@ -103,7 +103,7 @@ plot(stepsMeanPerInterval$interval, stepsMeanPerInterval$mean_steps,
      col="blue")
 ```
 
-![](PA1_report_files/figure-html/StepsMeanPerInterval-1.png) 
+![](PA1_template_files/figure-html/StepsMeanPerInterval-1.png) 
 
 2. The 5-minute interval, on average across all the days in the dataset,  which contains the maximum number of steps.
 
@@ -154,7 +154,7 @@ hist(stepsTotalPerDayFilled,
      col="red")
 ```
 
-![](PA1_report_files/figure-html/StepsTotalPerDayHistFilled-1.png) 
+![](PA1_template_files/figure-html/StepsTotalPerDayHistFilled-1.png) 
 
 4. The mean and median total number of steps taken per day for data with filled in missed values.
 
@@ -197,5 +197,5 @@ qplot(interval, mean_steps, data=stepsMeanIW,
       main="") + facet_wrap(~weekday, ncol=1) + theme(legend.position="none")
 ```
 
-![](PA1_report_files/figure-html/stepsMeanPerIntervalAndWeekday-1.png) 
+![](PA1_template_files/figure-html/stepsMeanPerIntervalAndWeekday-1.png) 
 
